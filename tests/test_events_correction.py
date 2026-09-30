@@ -46,16 +46,20 @@ def test_event_structure_ok():
 
 
 # TEST C1 + C2
-def test_param_q_trouve_event():
-    response = requests.get(f"{BASE_URL}/api/events?q=nbvshjsgfeqdkjsdhfkgez", timeout=TIMEOUT)
+@pytest.mark.parametrize("transformation", [
+    (lambda m: m),
+    (str.upper),
+    (str.lower)
+], ids=["CAS NORMAL", "CAS MAJUSCULE", "CAS MINUSCULE"])
+def test_param_q_trouve_event(transformation):
+    response = requests.get(f"{BASE_URL}/api/events", timeout=TIMEOUT)
     events = response.json()
 
     assert len(events) > 0, "Test impossible, aucun event sur lequel tester"
-
     mot = events[0]["title"].split()[0]
 
     params = {
-        'q': mot
+        'q': transformation(mot)
     }
 
     detail = requests.get(f"{BASE_URL}/api/events", params=params, timeout=TIMEOUT).json()
