@@ -1,3 +1,4 @@
+import pytest
 import requests
 
 BASE_URL = "http://localhost:8000"
@@ -42,4 +43,29 @@ def test_event_structure_ok():
         assert type(e["status"]) == str
         assert "cover_color" in e
         assert type(e["cover_color"]) == str
+
+
+# TEST C1 + C2
+def test_param_q_trouve_event():
+    response = requests.get(f"{BASE_URL}/api/events?q=nbvshjsgfeqdkjsdhfkgez", timeout=TIMEOUT)
+    events = response.json()
+
+    assert len(events) > 0, "Test impossible, aucun event sur lequel tester"
+
+    mot = events[0]["title"].split()[0]
+
+    params = {
+        'q': mot
+    }
+
+    detail = requests.get(f"{BASE_URL}/api/events", params=params, timeout=TIMEOUT).json()
+
+    assert events[0]["id"] in [e["id"] for e in detail]
+
+    # idList = []
+    # for d in detail:
+    #     idList.append(d["id"])
+
+    # assert events[0]["id"] in idList
+
 
