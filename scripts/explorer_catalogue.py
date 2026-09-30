@@ -17,3 +17,9 @@ for event in response.json():
 detail = requests.get(f"{BASE_URL}/api/events/{response.json()[0]['id']}", timeout=5)
 print(detail.status_code)
 print(detail.json())
+
+query_params = {
+    "city": "Gand"
+}
+
+response_city = requests.get(f"{BASE_URL}/api/events", params=query_params)
