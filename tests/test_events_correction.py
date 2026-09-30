@@ -17,7 +17,7 @@ def test_event_list_not_empty():
     assert response.status_code == 200, response.text
     events = response.json()
     # Verifie si la lsite est vide
-    assert events, "Liste vide"
+    assert len(events) > 0, "Liste vide"
 
 def test_event_structure_ok():
     response = requests.get(f"{BASE_URL}/api/events", timeout=TIMEOUT)
