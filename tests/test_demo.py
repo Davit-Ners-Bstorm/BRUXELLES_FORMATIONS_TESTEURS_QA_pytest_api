@@ -5,8 +5,8 @@ import pytest
 BASE_URL = "http://localhost:8000"
 TIMEOUT = 5
 
-result = requests.get(f"{BASE_URL}/api/events", timeout=TIMEOUT)
-events: list[dict] = result.json()
+# result = requests.get(f"{BASE_URL}/api/events", timeout=TIMEOUT)
+# events: list[dict] = result.json()
 
 # print(events)
 
@@ -19,10 +19,10 @@ events: list[dict] = result.json()
 
 # print([*map(lambda e: e["title"], events)])
 
-def fct(event):
-    return event["id"]
+# def fct(event):
+#     return event["id"]
 
-events.sort(reverse=True, key=lambda event: event["id"])
+# events.sort(reverse=True, key=lambda event: event["id"])
 
 # events.sort(key=lambda event: event["title"])
 

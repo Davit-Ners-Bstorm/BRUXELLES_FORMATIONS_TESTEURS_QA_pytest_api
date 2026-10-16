@@ -83,3 +83,27 @@ def test_param_q_trouve_event(transformation):
     #     idList.append(d["id"])
 
     # assert events[0]["id"] in idList
+
+# C3
+@pytest.mark.parametrize("message", [
+    ("zzz"),
+    ("aaa"),
+    ("bbb")
+])
+def test_aucune_correspondance(message):
+    response = requests.get(f"{BASE_URL}/api/events", timeout=TIMEOUT, params={"q": message})
+    assert response.status_code == 200, response.text
+    events = response.json()
+    assert events == []
+
+def test_q_vide()  :
+    res1 = requests.get(f"{BASE_URL}/api/events", timeout=TIMEOUT)
+    res2 = requests.get(f"{BASE_URL}/api/events?q=", timeout=TIMEOUT)
+    assert res1.status_code == 200, res1.text
+    assert res2.status_code == 200, res2.text
+
+    events_plein = res1.json()
+    events_vide = res2.json()
+    assert len(events_vide) == len(events_plein) #bravo
+
+import pytest as print
