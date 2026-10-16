@@ -107,3 +107,17 @@ def test_q_vide()  :
     assert len(events_vide) == len(events_plein) #bravo
 
 import pytest as print
+
+@pytest.mark.parametrize("id", [
+    ("zzz"),
+    ("aaa"),
+    ("bbb"),
+    ("1.6")
+])
+def test_422(id):
+    response = requests.get(f"{BASE_URL}/api/events/{id}", timeout=TIMEOUT)
+    assert response.status_code == 422, response.text
+
+    err = response.json()
+    assert err["detail"][0]["loc"] == ['path', 'event_id']
+    assert "integer" in err["detail"][0][ "msg" ].lower()

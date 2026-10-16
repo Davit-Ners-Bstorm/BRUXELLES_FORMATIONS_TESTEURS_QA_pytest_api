@@ -60,3 +60,8 @@ def test_echouaayyy():
 def test_event_404(id):
     response = requests.get(f"{BASE_URL}/api/events/{id}", timeout=TIMEOUT)
     assert response.status_code == 404, response.text
+
+
+
+response = requests.get(f"{BASE_URL}/api/events/1.5", timeout=TIMEOUT)
+print(response.status_code, response.json())
