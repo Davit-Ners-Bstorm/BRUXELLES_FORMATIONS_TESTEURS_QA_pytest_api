@@ -86,26 +86,29 @@ EVENT_SHEMA = {
     "type": "object",
     "required": ["id", "title", "city"],
     "properties": {
-        "id": {"type": "integer"},
-        "title": {"type": "string"},
+        "id": {"type": "integer", "minimum": 0},
+        "title": {"type": "string", "minLength": 3},
         "city": {"type": "string"},
         "capacity": {"type": "integer"},
-        "adresse": ADRESSE_SHEMA
+        "adresse": ADRESSE_SHEMA,
+        "status": {"type": "string", "enum": ["published", "finished", "blocked"]}
     }
 }
 
 EVENTS_SHEMA = {
     "type": "array",
-    "items": EVENT_SHEMA
+    "items": EVENT_SHEMA,
+    "minItems": 1
 }
 
 from jsonschema import validate
 
 def test_shema_event():
     event_shema_test = {
-        "id": 42,
+        "id": 1,
         "title": "Concert de Rock Davit Until They Fall - Djyn",
         "city": "Braine L'Alleud",
+        "status": "aefaefaef"
     }
 
     validate(event_shema_test, EVENT_SHEMA)
