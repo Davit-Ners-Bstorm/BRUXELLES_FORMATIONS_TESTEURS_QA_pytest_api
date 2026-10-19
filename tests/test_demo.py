@@ -85,11 +85,12 @@ ADRESSE_SHEMA = {
 EVENT_SHEMA = {
     "type": "object",
     "required": ["id", "title", "city"],
+    "additionalProperties": False,
     "properties": {
         "id": {"type": "integer", "minimum": 0},
         "title": {"type": "string", "minLength": 3},
         "city": {"type": "string"},
-        "capacity": {"type": "integer"},
+        "capacity": {"type": "integer", "minimum": 0},
         "adresse": ADRESSE_SHEMA,
         "status": {"type": "string", "enum": ["published", "finished", "blocked"]}
     }
@@ -101,17 +102,44 @@ EVENTS_SHEMA = {
     "minItems": 1
 }
 
-from jsonschema import validate
+from jsonschema import validate, ValidationError
 
 def test_shema_event():
     event_shema_test = {
         "id": 1,
         "title": "Concert de Rock Davit Until They Fall - Djyn",
         "city": "Braine L'Alleud",
-        "status": "aefaefaef"
+        "status": "blocked"
     }
 
     validate(event_shema_test, EVENT_SHEMA)
+
+from tests.helpers import load_json
+
+IMPORTED_SCHEMA = load_json("schemas/event_schema.json")
+
+def test_shema_imported_event():
+    event_test = {
+        "id": 5,
+        "title": "test",
+        "city": "test"
+    }
+
+    validate(event_test, IMPORTED_SCHEMA)
+
+
+def test_shema_doit_casser():
+    event_test = {
+        "id": 5,
+        "title": "test",
+        "city": "test"
+    }
+
+    del event_test["id"]
+
+    with pytest.raises(ValidationError):
+        validate(event_test, IMPORTED_SCHEMA)
+
 
 
 
