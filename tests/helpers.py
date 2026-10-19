@@ -1,5 +1,6 @@
 TIMEOUT = 5
 import json
+import requests
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -14,3 +15,12 @@ def event_Array_Schema() :
         "type" : "array",
         "items" : eventOut
     }
+def login(base_url, email,password):
+    response = requests.post(f'{base_url}/api/auth/token', data={'username':email, 'password':password},timeout=TIMEOUT)
+    assert response.status_code == 200, response.text
+    token = response.json()
+    return {
+        'Authorization' : f"Bearer {token['access_token']}" 
+    }
+
+
