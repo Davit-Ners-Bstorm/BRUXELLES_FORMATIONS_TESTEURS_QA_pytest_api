@@ -29,6 +29,6 @@ def all_events(base_url):
     return get_all_events(base_url)
 
 @pytest.fixture
-def get_bookable(base_url, all_events, min_available = 1):
-    event_cat = get_bookable_event_cat(base_url, all_events, min_available)
+def get_bookable(base_url, all_events):
+    event_cat = get_bookable_event_cat(base_url, all_events, 6)
     return event_cat
