@@ -1,5 +1,6 @@
 TIMEOUT = 5
 import json
+import pytest
 import requests
 from pathlib import Path
 
@@ -22,3 +23,25 @@ def login(base_url, email,password):
     return {
         'Authorization' : f"{login_cred["token_type"].capitalize()} {login_cred['access_token']}" 
     }
+
+def get_all_events(base_url):
+    response = requests.get(f"{base_url}/api/events", timeout=TIMEOUT)
+    assert response.status_code == 200, response.text
+    return response.json()
+
+def get_bookable_event_cat(base_url, events_summary, min_available = 1):
+    for event in events_summary:
+        response = requests.get(f"{base_url}/api/events/{event["id"]}", timeout=TIMEOUT)
+        assert response.status_code == 200, response.text
+        detail_event = response.json()
+        if detail_event["status"] != 'published':
+            continue
+        for categorie in detail_event["categories"]:
+            if categorie["available"] >= min_available:
+                return {
+                    "event" : event, 
+                    "categorie" : categorie
+                }
+    return None
+
+        

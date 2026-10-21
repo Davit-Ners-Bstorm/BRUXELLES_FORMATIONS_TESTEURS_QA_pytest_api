@@ -3,7 +3,7 @@ import os
 import pytest
 import requests
 
-from tests.helpers import login
+from tests.helpers import get_all_events, get_bookable_event_cat, login
 
 load_dotenv()
 
@@ -23,3 +23,12 @@ def auth_headers(base_url):
     email = os.getenv('EF_CLIENT_USERNAME')
     password = os.getenv('EF_CLIENT_PASSWORD')
     return login(base_url, email, password)
+
+@pytest.fixture
+def all_events(base_url):
+    return get_all_events(base_url)
+
+@pytest.fixture
+def get_bookable(base_url, all_events, min_available = 1):
+    event_cat = get_bookable_event_cat(base_url, all_events, min_available)
+    return event_cat
