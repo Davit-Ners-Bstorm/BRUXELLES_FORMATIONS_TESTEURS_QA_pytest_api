@@ -18,9 +18,7 @@ def event_Array_Schema() :
 def login(base_url, email,password):
     response = requests.post(f'{base_url}/api/auth/token', data={'username':email, 'password':password},timeout=TIMEOUT)
     assert response.status_code == 200, response.text
-    token = response.json()
+    login_cred = response.json()
     return {
-        'Authorization' : f"Bearer {token['access_token']}" 
+        'Authorization' : f"{login_cred["token_type"].capitalize()} {login_cred['access_token']}" 
     }
-
-
